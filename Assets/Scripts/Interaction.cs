@@ -6,6 +6,10 @@ using TMPro;
 public class Interaction : MonoBehaviour {
     [SerializeField] private CanvasGroup panel;
     private TextMeshProUGUI objectText;
+
+    private string the_lerp;
+    private bool lerping;
+
     private void Start() {
         if (panel != null) {
             objectText = panel.gameObject.GetComponentInChildren<TextMeshProUGUI>();
@@ -21,7 +25,9 @@ public class Interaction : MonoBehaviour {
             if (hit.transform.TryGetComponent( out MoveObject mo)){
                 mo.StartLerp();
                 StartCoroutine(RevealPanel());
-                //objectText.text = "Name: " + hit.transform.name + "\nEasing = " + mo.e + "\nReturns? = " + (mo.b == true ? "True" : "False");     //mo.e and mo.b are place holders for the info on ease and return
+                the_lerp = hit.transform.GetComponentInParent<MoveObject>().which_lerp;
+                lerping = hit.transform.GetComponentInParent<MoveObject>().is_lerping;
+                objectText.text = "Name: " + hit.transform.name + "\nEasing = " + the_lerp + "\nReturns? = " + (lerping == true ? "True" : "False");
             }
         }
         else
