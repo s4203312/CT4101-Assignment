@@ -18,21 +18,22 @@ public class Interaction : MonoBehaviour {
 
     void Update()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit)) {
-            Debug.DrawLine(ray.origin, hit.point, Color.red);
-            if (hit.transform.TryGetComponent( out MoveObject mo)){
-                mo.StartLerp();
-                StartCoroutine(RevealPanel());
-                the_lerp = hit.transform.GetComponentInParent<MoveObject>().which_lerp;
-                lerping = hit.transform.GetComponentInParent<MoveObject>().is_lerping;
-                objectText.text = "Name: " + hit.transform.name + "\nEasing = " + the_lerp + "\nReturns? = " + (lerping == true ? "True" : "False");
+        if (Input.GetKeyDown(KeyCode.Mouse0)) {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit)) {
+                Debug.DrawLine(ray.origin, hit.point, Color.red);
+                if (hit.transform.TryGetComponent(out MoveObject mo)) {
+                    mo.StartLerp();
+                    StartCoroutine(RevealPanel());
+                    the_lerp = hit.transform.GetComponentInParent<MoveObject>().which_lerp;
+                    lerping = hit.transform.GetComponentInParent<MoveObject>().is_lerping;
+                    objectText.text = "Name: " + hit.transform.name + "\nEasing = " + the_lerp + "\nReturns? = " + (lerping == true ? "True" : "False");
+                }
             }
-        }
-        else
-        {
-            StartCoroutine(HidePanel());
+            else {
+                StartCoroutine(HidePanel());
+            }
         }
     }
 

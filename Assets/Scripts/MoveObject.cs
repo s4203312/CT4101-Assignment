@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,13 +9,22 @@ public class MoveObject : MonoBehaviour
 {
     [SerializeField] private float growth = 1f;
     private float t;
-    [SerializeField] private Slider slider;
     
+    [SerializeField] private Slider slider;
+    [SerializeField] private CanvasGroup panel;
+
     [SerializeField] public string which_lerp;
     [SerializeField] public bool is_lerping;
     
     public void StartLerp(){
         StartCoroutine(Lerp());
+    }
+
+    private void Start() {
+        if (panel != null) {
+            slider = panel.gameObject.GetComponentInChildren<Slider>();
+            slider.enabled = true;
+        }
     }
 
     private IEnumerator Lerp(){

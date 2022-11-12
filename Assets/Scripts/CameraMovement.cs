@@ -6,6 +6,7 @@ public class CameraMovement : MonoBehaviour {
 
     private Vector3 cam_pos;
     [SerializeField] private float cam_speed = 0.03f;
+    [SerializeField] private Camera cam;
 
     void Start() {
         cam_pos = gameObject.transform.position;
