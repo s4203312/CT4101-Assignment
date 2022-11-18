@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class Interaction : MonoBehaviour {
     [SerializeField] private CanvasGroup panel;
@@ -23,16 +24,13 @@ public class Interaction : MonoBehaviour {
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit)) {
                 Debug.DrawLine(ray.origin, hit.point, Color.red);
-                if (hit.transform.TryGetComponent(out MoveObject mo)) {
-                    mo.StartLerp();
+                if (hit.transform.TryGetComponent(out MoveObject moveobject)) {
+                    moveobject.StartLerp();
                     StartCoroutine(RevealPanel());
                     the_lerp = hit.transform.GetComponentInParent<MoveObject>().which_lerp;
                     lerping = hit.transform.GetComponentInParent<MoveObject>().is_lerping;
                     objectText.text = "Name: " + hit.transform.name + "\nEasing = " + the_lerp + "\nReturns? = " + (lerping == true ? "True" : "False");
                 }
-            }
-            else {
-                StartCoroutine(HidePanel());
             }
         }
     }
@@ -46,13 +44,17 @@ public class Interaction : MonoBehaviour {
             yield return new WaitForSeconds(Time.deltaTime);
         }
     }
-    private IEnumerator HidePanel(){
+    public IEnumerator HidePanel(){
         float time = 0;
         while (time <= 1)
         {
-            panel.alpha = 1- EasesClass.Powers.Quadratic.Out(time);
+            panel.alpha = 1 - EasesClass.Powers.Quadratic.In(time);
             time += Time.deltaTime;
             yield return new WaitForSeconds(Time.deltaTime);
         }
+    }
+    public void HidingPanel()
+    {
+        HidePanel();
     }
 }
