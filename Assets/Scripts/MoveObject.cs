@@ -5,11 +5,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MoveObject : MonoBehaviour
-{
-    [SerializeField] private float growth = 1f;
+public class MoveObject : MonoBehaviour {
     private float t;
-    
+
     [SerializeField] private Slider slider;
     [SerializeField] private CanvasGroup panel;
 
@@ -18,9 +16,19 @@ public class MoveObject : MonoBehaviour
 
     [SerializeField] TMP_Dropdown dropdown;
 
-    public void StartLerp(){
+    public float length;
+    public Vector3 old_pos;
+
+    public void StartLerp() {
         slider.gameObject.SetActive(true);
         StartCoroutine(Lerp());
+    }
+    public void StartFirework() {
+        StartCoroutine(Firework());
+    }
+    public void ResetLerp() {
+        Debug.Log("Moved");
+        gameObject.transform.position = old_pos;
     }
 
     private void Start() {
@@ -28,51 +36,54 @@ public class MoveObject : MonoBehaviour
             slider = panel.gameObject.GetComponentInChildren<Slider>();
             slider.gameObject.SetActive(false);
         }
+        old_pos = transform.position;
     }
 
-    private IEnumerator Lerp(){
+    private IEnumerator Lerp() {
         float time = 0f;
-        while (time < 1f)
-        {
-            if (dropdown == null)
-            {
+        while (time < 1f) {
+            if (dropdown == null) {
                 yield return null;
             }
-            if (dropdown.value == 0)
-            {
+            if (dropdown.value == 0) {
                 t = EasesClass.Powers.Quadratic.InOut(time);
                 which_lerp = "EasesClass.Powers.Quadratic.InOut";
             }
-            else if (dropdown.value == 1)
-            {
+            else if (dropdown.value == 1) {
                 t = EasesClass.Trigonometric.Sin.Out(time);
                 which_lerp = "EasesClass.Trigonometric.Sin.Out";
             }
-            else if (dropdown.value == 2)
-            {
+            else if (dropdown.value == 2) {
                 t = EasesClass.Exponential.In(time);
                 which_lerp = "EasesClass.Exponential.In";
             }
-            else if (dropdown.value == 3)
-            {
+            else if (dropdown.value == 3) {
                 t = EasesClass.Elastic.Out(time);
                 which_lerp = "EasesClass.Elastic.Out";
             }
-            else if (dropdown.value == 4)
-            {
+            else if (dropdown.value == 4) {
                 t = EasesClass.Bounce.InOut(time);
                 which_lerp = "EasesClass.Bounce.InOut";
             }
-        time += Time.deltaTime;
-        yield return new WaitForSeconds(Time.deltaTime);
+            time += Time.deltaTime;
+            length = 30;
+            yield return new WaitForSeconds(Time.deltaTime);
         }
     }
-    
-    void Update(){
-        transform.localScale = Vector3.one * Mathf.Lerp(1, growth, t);
-        float rotation = Mathf.InverseLerp(0, 1, t) * 360f;
-        transform.localEulerAngles = new Vector3(rotation,0f, 0f);
-        
+    private IEnumerator Firework() {
+        float time = 0f;
+        while (time < 1f){
+            t = EasesClass.Powers.Quintic.In(time);
+            time += Time.deltaTime;
+            length = 30;
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+    }
+
+    void Update() {
+        float position = Mathf.InverseLerp(0, 1, t) * length;
+        transform.position = new Vector3(position, transform.position.y, transform.position.z);
+
         slider.value = Mathf.InverseLerp(0, 1, t);
         is_lerping = true;
     }

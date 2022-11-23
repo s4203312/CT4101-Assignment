@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour {
@@ -12,6 +13,13 @@ public class CameraMovement : MonoBehaviour {
         cam_pos = gameObject.transform.position;
     }
     void Update() {
+        if (Input.GetKey(KeyCode.LeftShift)) {
+            cam_speed = 6;
+        }
+        else {
+            cam_speed = 3;
+        }
+        
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) {
             cam_pos = cam_pos + (Vector3.left * cam_speed * Time.deltaTime);
             gameObject.transform.position = cam_pos;
@@ -27,6 +35,26 @@ public class CameraMovement : MonoBehaviour {
         else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) {
             cam_pos = cam_pos + (Vector3.back * cam_speed * Time.deltaTime);
             gameObject.transform.position = cam_pos;
+        }
+        if (Input.GetKey(KeyCode.Mouse1)) {
+            //This mouse movement code was copied from the internet to help with userbillity
+            //https://answers.unity.com/questions/149022/how-to-make-camera-move-with-the-mouse-cursors.html
+            float mouseX = (Input.mousePosition.x / Screen.width) - 0.5f;
+            float mouseY = (Input.mousePosition.y / Screen.height) - 0.5f;
+            transform.localRotation = Quaternion.Euler(new Vector4(-1f * (mouseY * 180f), mouseX * 360f, transform.localRotation.z));
+            //*
+        }
+    }
+
+    public void ShakeCamera() {
+        StartCoroutine(CamShake());
+    }
+    private IEnumerator CamShake() {
+        float time = 0;
+        while (time <= 1) {
+            cam_pos = cam_pos + new Vector3(Mathf.PingPong(EasesClass.Bounce.InOut(time), 1f), 0, 0);
+            time += Time.deltaTime;
+            yield return new WaitForSeconds(Time.deltaTime);
         }
     }
 }

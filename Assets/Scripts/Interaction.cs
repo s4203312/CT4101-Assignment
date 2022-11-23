@@ -10,6 +10,7 @@ public class Interaction : MonoBehaviour {
 
     private string the_lerp;
     private bool lerping;
+    public Camera cam;
 
     private void Start() {
         if (panel != null) {
@@ -17,44 +18,44 @@ public class Interaction : MonoBehaviour {
         }
     }
 
-    void Update()
-    {
+    void Update() {
         if (Input.GetKeyDown(KeyCode.Mouse0)) {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit)) {
                 Debug.DrawLine(ray.origin, hit.point, Color.red);
-                if (hit.transform.TryGetComponent(out MoveObject moveobject)) {
-                    moveobject.StartLerp();
-                    StartCoroutine(RevealPanel());
-                    the_lerp = hit.transform.GetComponentInParent<MoveObject>().which_lerp;
-                    lerping = hit.transform.GetComponentInParent<MoveObject>().is_lerping;
-                    objectText.text = "Name: " + hit.transform.name + "\nEasing = " + the_lerp + "\nReturns? = " + (lerping == true ? "True" : "False");
+                if (hit.transform.CompareTag("MoveObject")) {
+                    if (hit.transform.TryGetComponent(out MoveObject moveobject)) {
+                        moveobject.StartLerp();
+                        StartCoroutine(RevealPanel());
+                        the_lerp = hit.transform.GetComponentInParent<MoveObject>().which_lerp;
+                        lerping = hit.transform.GetComponentInParent<MoveObject>().is_lerping;
+                        objectText.text = "Name: " + hit.transform.name + "\nEasing: " + the_lerp + "\nReturns: " + (lerping == true ? "True" : "False");
+                    }
+                }
+                else if (hit.transform.CompareTag("Firework")) {
+                    if(hit.transform.TryGetComponent(out MoveObject firework)) {
+                        firework.StartFirework();
+                        //new WaitForSeconds(1f);
+                        cam = Camera.FindObjectOfType<Camera>();
+                        if (cam != null) {
+                            if (cam.transform.TryGetComponent(out CameraMovement camshake)) {
+                                camshake.ShakeCamera();
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
-    private IEnumerator RevealPanel(){
+    private IEnumerator RevealPanel() {
         float time = 0;
-        while (time <= 1)
-        {
+        while (time <= 1) {
             panel.alpha = EasesClass.Powers.Quadratic.In(time);
             time += Time.deltaTime;
             yield return new WaitForSeconds(Time.deltaTime);
         }
     }
-    public IEnumerator HidePanel(){
-        float time = 0;
-        while (time <= 1)
-        {
-            panel.alpha = 1 - EasesClass.Powers.Quadratic.In(time);
-            time += Time.deltaTime;
-            yield return new WaitForSeconds(Time.deltaTime);
-        }
-    }
-    public void HidingPanel()
-    {
-        HidePanel();
-    }
 }
+
