@@ -20,6 +20,7 @@ public class CameraMovement : MonoBehaviour {
             cam_speed = 3;
         }
         
+        //Code for camera movement
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) {
             cam_pos = cam_pos + (Vector3.left * cam_speed * Time.deltaTime);
             gameObject.transform.position = cam_pos;
@@ -36,6 +37,7 @@ public class CameraMovement : MonoBehaviour {
             cam_pos = cam_pos + (Vector3.back * cam_speed * Time.deltaTime);
             gameObject.transform.position = cam_pos;
         }
+        
         if (Input.GetKey(KeyCode.Mouse1)) {
             //This mouse movement code was copied from the internet to help with userbillity
             //https://answers.unity.com/questions/149022/how-to-make-camera-move-with-the-mouse-cursors.html
@@ -44,6 +46,7 @@ public class CameraMovement : MonoBehaviour {
             transform.localRotation = Quaternion.Euler(new Vector4(-1f * (mouseY * 180f), mouseX * 360f, transform.localRotation.z));
             //*
         }
+        transform.position = cam_pos;
     }
 
     public void ShakeCamera() {
@@ -51,8 +54,8 @@ public class CameraMovement : MonoBehaviour {
     }
     private IEnumerator CamShake() {
         float time = 0;
-        while (time <= 1) {
-            cam_pos = cam_pos + new Vector3(Mathf.PingPong(EasesClass.Bounce.InOut(time), 1f), 0, 0);
+        while (time <= 2f) {
+            cam_pos = cam_pos + new Vector3(EasesClass.Bounce.InOut(time), 0, 0);
             time += Time.deltaTime;
             yield return new WaitForSeconds(Time.deltaTime);
         }

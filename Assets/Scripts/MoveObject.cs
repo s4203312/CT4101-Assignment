@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class MoveObject : MonoBehaviour {
     private float t;
+    private float growth = 10f;
 
     [SerializeField] private Slider slider;
     [SerializeField] private CanvasGroup panel;
@@ -16,7 +17,6 @@ public class MoveObject : MonoBehaviour {
 
     [SerializeField] TMP_Dropdown dropdown;
 
-    public float length;
     public Vector3 old_pos;
 
     public void StartLerp() {
@@ -28,7 +28,7 @@ public class MoveObject : MonoBehaviour {
     }
     public void ResetLerp() {
         Debug.Log("Moved");
-        gameObject.transform.position = old_pos;
+        transform.position = old_pos;
     }
 
     private void Start() {
@@ -46,7 +46,7 @@ public class MoveObject : MonoBehaviour {
                 yield return null;
             }
             if (dropdown.value == 0) {
-                t = EasesClass.Powers.Quadratic.InOut(time);
+                t = EasesClass.Powers.Quadratic.InOut(time, 3);
                 which_lerp = "EasesClass.Powers.Quadratic.InOut";
             }
             else if (dropdown.value == 1) {
@@ -66,7 +66,7 @@ public class MoveObject : MonoBehaviour {
                 which_lerp = "EasesClass.Bounce.InOut";
             }
             time += Time.deltaTime;
-            length = 30;
+            growth = 23f;
             yield return new WaitForSeconds(Time.deltaTime);
         }
     }
@@ -75,13 +75,13 @@ public class MoveObject : MonoBehaviour {
         while (time < 1f){
             t = EasesClass.Powers.Quintic.In(time);
             time += Time.deltaTime;
-            length = 30;
+            growth = 100f;
             yield return new WaitForSeconds(Time.deltaTime);
         }
     }
 
     void Update() {
-        float position = Mathf.InverseLerp(0, 1, t) * length;
+        float position = Mathf.Lerp(0, growth, t);
         transform.position = new Vector3(position, transform.position.y, transform.position.z);
 
         slider.value = Mathf.InverseLerp(0, 1, t);

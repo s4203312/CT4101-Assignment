@@ -52,10 +52,13 @@ public class Interaction : MonoBehaviour {
     private IEnumerator RevealPanel() {
         float time = 0;
         while (time <= 1) {
-            panel.alpha = EasesClass.Powers.Quadratic.In(time);
+            panel.alpha = EasesClass.Powers.Quadratic.In(time, 1);
             time += Time.deltaTime;
             yield return new WaitForSeconds(Time.deltaTime);
         }
     }
+
+    //Junlge audio
+    //https://freesound.org/people/VABsounds/sounds/381384/
 }
 

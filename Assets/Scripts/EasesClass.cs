@@ -12,22 +12,23 @@ public class EasesClass
 
 
     public class Powers{
-        public static float Linear(float t){
-            return t;
+        public static float Linear(float t, float c){
+            return t * c;
         }
         public class Quadratic{
-            public static float In(float t){
-                return t * t;
+            public static float In(float t, float c)
+            {
+                return t * t * c;
             }
-            public static float Out(float t){
-                return t * (2f - t);
+            public static float Out(float t, float c){
+                return t * (2f - t) * c;
             }
-            public static float InOut(float t){
-                if ((t *= 2f) < 1f) return 0.5f * t * t;
-                return -0.5f * ((t -= 1f) * (t - 2f) - 1f);
+            public static float InOut(float t, float c){
+                if ((t *= 2f) < 1f) return 0.5f * t * t * c;
+                return -0.5f * ((t -= 1f) * (t - 2f) - 1f) * c;
             }
             public static float Bezier(float t, float c){
-                return c * 2 * t * (1 - t) + t * t;
+                return 2 * t * (1 - t) + t * t * c;
             }
         }
         public class Cubic{
