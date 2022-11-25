@@ -48,8 +48,5 @@ public class Interaction : MonoBehaviour {
             yield return new WaitForSeconds(Time.deltaTime);
         }
     }
-
-    //Junlge audio
-    //https://freesound.org/people/VABsounds/sounds/381384/
 }
 
