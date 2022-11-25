@@ -13,9 +13,12 @@ public class FireWork : MonoBehaviour
     private float growth = 10f;
     public GameObject[] firework;
     [SerializeField] private GameObject particals;
+    [SerializeField] private AudioClip explode;
+    AudioSource speaker;
 
     void Start() {
         cam_pos = gameObject.transform.position;
+        speaker = gameObject.GetComponent<AudioSource>();
     }
     
     //Starting firework function
@@ -34,6 +37,7 @@ public class FireWork : MonoBehaviour
         GameObject[] firework = GameObject.FindGameObjectsWithTag("Firework");
         foreach (GameObject fire in firework) {
             Object.Destroy(fire);
+            speaker.Play();                     //Playing explosion sound
             if (particals != null) {
                 GameObject clone = Instantiate(particals, fire.transform.position, fire.transform.rotation);        //Creating paricals
                 Destroy(clone, 1f);
@@ -48,7 +52,8 @@ public class FireWork : MonoBehaviour
             float position = Mathf.Lerp(0, growth, t);
             fire.transform.position = new Vector3(fire.transform.position.x, position, fire.transform.position.z);
         }
-        if(cam_t != 0) {                                                                    //Camera lerp
+        //This doesnt really work as i intended it too.
+        if(cam_t != 0) {                                                                    //Camera lerp for shake
             float position = Mathf.PingPong(Mathf.InverseLerp(0, 1, t),1);
             gameObject.transform.position = cam_pos + new Vector3(position, cam_pos.y, cam_pos.z);
         }

@@ -4,6 +4,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MoveObject : MonoBehaviour {
     //Variables
@@ -26,9 +27,8 @@ public class MoveObject : MonoBehaviour {
         StartCoroutine(Lerp());
     }
     //Reseting the position of cube
-    public void ResetLerp() {
-        Debug.Log("Moved");
-        transform.position = old_pos;
+    public void ResetLerp(string scenename) {
+        SceneManager.LoadScene(scenename);
     }
 
     private void Start() {
@@ -36,7 +36,7 @@ public class MoveObject : MonoBehaviour {
             slider = panel.gameObject.GetComponentInChildren<Slider>();
             slider.gameObject.SetActive(false);
         }
-        old_pos = transform.position;
+        //old_pos = transform.position;         //This was used in the initial implementation of reset but did not work
     }
 
     //Creating a dropdown for the lerps
