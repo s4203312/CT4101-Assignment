@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class MoveObject : MonoBehaviour {
+    //Variables
     private float t;
     private float growth = 10f;
 
@@ -19,13 +20,12 @@ public class MoveObject : MonoBehaviour {
 
     public Vector3 old_pos;
 
+    //Starting the lerp function
     public void StartLerp() {
         slider.gameObject.SetActive(true);
         StartCoroutine(Lerp());
     }
-    public void StartFirework() {
-        StartCoroutine(Firework());
-    }
+    //Reseting the position of cube
     public void ResetLerp() {
         Debug.Log("Moved");
         transform.position = old_pos;
@@ -39,6 +39,7 @@ public class MoveObject : MonoBehaviour {
         old_pos = transform.position;
     }
 
+    //Creating a dropdown for the lerps
     private IEnumerator Lerp() {
         float time = 0f;
         while (time < 1f) {
@@ -70,16 +71,7 @@ public class MoveObject : MonoBehaviour {
             yield return new WaitForSeconds(Time.deltaTime);
         }
     }
-    private IEnumerator Firework() {
-        float time = 0f;
-        while (time < 1f){
-            t = EasesClass.Powers.Quintic.In(time);
-            time += Time.deltaTime;
-            growth = 100f;
-            yield return new WaitForSeconds(Time.deltaTime);
-        }
-    }
-
+    //Performing the lerps
     void Update() {
         float position = Mathf.Lerp(0, growth, t);
         transform.position = new Vector3(position, transform.position.y, transform.position.z);

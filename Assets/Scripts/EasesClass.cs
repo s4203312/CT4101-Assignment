@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class EasesClass
 {
-
+    //Constants used in the calculations
     private const float easeElasticConst = (2f * Mathf.PI) / 3f;
     private const float easeInOutElasticConst = (2f * Mathf.PI) / 4.5f;
     private const float easeOutBounceConst1 = 7.5625f;
     private const float easeOutBounceConst2 = 2.75f;
 
-
+    //Eases for powers
     public class Powers{
         public static float Linear(float t, float c){
             return t * c;
@@ -68,6 +68,7 @@ public class EasesClass
             }
         }
     }
+    //Eases for Trigonometry
     public class Trigonometric{
         public class Sin{
             public static float In(float t){
@@ -94,6 +95,7 @@ public class EasesClass
             }
         }
     }
+    //Eases for Exponential
     public class Exponential{
         public static float In(float t){
             if(t == 0) return 0;
@@ -110,6 +112,7 @@ public class EasesClass
             return (2 - Mathf.Pow(2, -20 * t + 10)) / 2;
         }
     }
+    //Eases for Circular
     public class Circular{
         public static float In(float t){
             return 1 - Mathf.Sqrt(1 - Mathf.Pow(t, 2));
@@ -121,8 +124,8 @@ public class EasesClass
             if(t < 0.5) return (1 - Mathf.Sqrt(1 - Mathf.Pow(2 * t, 2))) / 2;
             return (Mathf.Sqrt(1 - Mathf.Pow(-2 * t + 2, 2)) + 1) / 2;
         }
-   }
-
+    }
+    //Eases for Elastic
     public class Elastic{
         public static float In(float t){
             if (t == 0) return 0f;
@@ -143,6 +146,7 @@ public class EasesClass
             return (Mathf.Pow(2, -20 * t + 10) * Mathf.Sin((20f * t - 11.125f) * easeInOutElasticConst)) / 2 + 1;
         }
     }
+    //Eases for Bounce
     public class Bounce{
         public static float In(float t){
             return 1 - Out(1 - t);

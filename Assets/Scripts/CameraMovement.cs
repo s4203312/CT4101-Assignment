@@ -5,15 +5,16 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour {
 
+    //Variables for the camera movements
     private Vector3 cam_pos;
     [SerializeField] private float cam_speed;
     [SerializeField] private Camera cam;
 
     void Start() {
-        cam_pos = gameObject.transform.position;
+        cam_pos = gameObject.transform.position;        //Setting the position of the camera
     }
     void Update() {
-        if (Input.GetKey(KeyCode.LeftShift)) {
+        if (Input.GetKey(KeyCode.LeftShift)) {          //Creating a way to move camera faster
             cam_speed = 6;
         }
         else {
@@ -47,17 +48,5 @@ public class CameraMovement : MonoBehaviour {
             //*
         }
         transform.position = cam_pos;
-    }
-
-    public void ShakeCamera() {
-        StartCoroutine(CamShake());
-    }
-    private IEnumerator CamShake() {
-        float time = 0;
-        while (time <= 2f) {
-            cam_pos = cam_pos + new Vector3(EasesClass.Bounce.InOut(time), 0, 0);
-            time += Time.deltaTime;
-            yield return new WaitForSeconds(Time.deltaTime);
-        }
     }
 }

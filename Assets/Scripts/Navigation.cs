@@ -9,4 +9,9 @@ public class Navigation : MonoBehaviour
     {
         SceneManager.LoadScene(sceneName);
     }
+    private void Update() {                         //Escape can quit the game
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            Application.Quit();
+        }
+    }
 }
