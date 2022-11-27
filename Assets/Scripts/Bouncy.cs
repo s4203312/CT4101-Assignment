@@ -4,14 +4,25 @@ using UnityEngine;
 
 public class Bouncy : MonoBehaviour
 {
-    PhysicMaterial mat;
+    Collider col;
+    [SerializeField] private float bounce;
     private float t;
 
-    //Making the bounciness of the ball lerp between 0 and 1
+    private IEnumerator Lerp() {
+        float time = 0f;
+        while (time < 1f) {
+            t = EasesClass.Powers.Quadratic.InOut(time, 3);
+            time += Time.deltaTime;
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+    }
+
+    //Making the bounciness of the ball lerp between 0.5 and 1
     void Update()
     {
-        t = Time.deltaTime;
-        mat = gameObject.GetComponent<SphereCollider>().GetComponent<PhysicMaterial>();
-        mat.bounciness = Mathf.Lerp(0, 1, t);
+        col = gameObject.GetComponent<SphereCollider>();
+        col.material.bounciness = bounce;
+        bounce = Mathf.Lerp(0.5f, 1, t);
+        bounce = col.material.bounciness;
     }
 }
